@@ -1,10 +1,25 @@
 # CoachTech 勤怠管理アプリ
 
-## 概要
+## 環境構築
 
-一般の働く大人をターゲットとした勤怠管理 Web アプリケーションです。ユーザー登録・ログイン、勤怠打刻、休憩管理、勤怠一覧、詳細表示、修正申請、管理者機能を提供します。
+### Docker ビルド
 
-## 技術スタック
+1. `git clone https://github.com/kazunekazune/kintai.git`
+2. `cd kintai-app`
+3. `./vendor/bin/sail up -d --build`
+
+**注意**: MySQL は、OS によって起動しない場合があるのでそれぞれの PC に合わせて `docker-compose.yml` ファイルを編集してください。
+
+### Laravel 環境構築
+
+1. `./vendor/bin/sail exec laravel.test bash`
+2. `composer install`
+3. `.env.example`ファイルから`.env`を作成し、環境を全更新
+4. `php artisan key:generate`
+5. `php artisan migrate`
+6. `php artisan db:seed --class=AdminUserSeeder`
+
+## 使用技術（実行環境）
 
 -   **PHP**: 8.2
 -   **Laravel**: 11.x
@@ -14,76 +29,16 @@
 -   **UI**: Bootstrap 5
 -   **言語**: 日本語対応
 
-## 環境構築
+## ER 図
 
-### 前提条件
+<--- 作成した ER 図の画像 --->
 
--   Docker Desktop
--   Git
+**ER 図の確認**: `http://localhost/er-diagram.html` で確認可能
 
-### セットアップ手順
+## URL
 
-1. **リポジトリのクローン**
-
-    ```bash
-    git clone <repository-url>
-    cd kintai-app
-    ```
-
-2. **Docker コンテナの起動**
-
-    ```bash
-    ./vendor/bin/sail up -d
-    ```
-
-3. **依存関係のインストール**
-
-    ```bash
-    ./vendor/bin/sail composer install
-    ```
-
-4. **環境設定ファイルの作成**
-
-    ```bash
-    cp .env.example .env
-    ```
-
-5. **アプリケーションキーの生成**
-
-    ```bash
-    ./vendor/bin/sail artisan key:generate
-    ```
-
-6. **データベースのマイグレーション**
-
-    ```bash
-    ./vendor/bin/sail artisan migrate
-    ```
-
-7. **管理者ユーザーの作成**
-    ```bash
-    ./vendor/bin/sail artisan db:seed --class=AdminUserSeeder
-    ```
-
-## アクセス情報
-
-### アプリケーション URL
-
--   **ローカル環境**: http://localhost
-
-### テストユーザー
-
-#### 一般ユーザー
-
--   **メールアドレス**: user@example.com
--   **パスワード**: password
--   **登録方法**: `/register` から新規登録
-
-#### 管理者ユーザー
-
--   **メールアドレス**: admin@example.com
--   **パスワード**: password
--   **アクセス**: `/admin/login` からログイン
+-   **開発環境**: `http://localhost/`
+-   **phpMyAdmin**: `http://localhost:8080/`
 
 ## 機能一覧
 
@@ -103,6 +58,20 @@
 -   **スタッフ一覧**: 登録ユーザー一覧表示
 -   **スタッフ別勤怠**: 特定スタッフの勤怠一覧
 -   **修正申請承認**: 修正申請の承認・却下処理
+
+## テストユーザー
+
+### 一般ユーザー
+
+-   **メールアドレス**: user@example.com
+-   **パスワード**: password
+-   **登録方法**: `/register` から新規登録
+
+### 管理者ユーザー
+
+-   **メールアドレス**: admin@example.com
+-   **パスワード**: password
+-   **アクセス**: `/admin/login` からログイン
 
 ## 画面一覧
 
@@ -139,10 +108,6 @@
 | 9   | failed_jobs                    | 失敗したジョブ               |
 | 10  | personal_access_tokens         | API トークン                 |
 
-### ER 図
-
--   **ER 図**: `http://localhost/er-diagram.html` で確認可能
-
 ## 開発・テスト
 
 ### 開発サーバーの起動
@@ -155,12 +120,6 @@
 
 ```bash
 ./vendor/bin/sail artisan test
-```
-
-### コード品質チェック
-
-```bash
-./vendor/bin/sail artisan pint
 ```
 
 ### データベースリセット
@@ -177,37 +136,6 @@
 -   `storage/*.key` - 暗号化キー
 -   `*.pem`, `*.key`, `*.crt` - 証明書・秘密鍵
 -   `storage/logs/` - ログファイル
-
-### 安全にアップロードされるファイル
-
--   `.env.example` - 安全なテンプレート
--   ソースコード
--   設定ファイル
--   ビューファイル
--   マイグレーションファイル
-
-## プロジェクト構成
-
-```
-kintai-app/
-├── app/
-│   ├── Http/Controllers/     # コントローラー
-│   ├── Http/Middleware/      # ミドルウェア
-│   ├── Http/Requests/        # バリデーション
-│   ├── Models/               # モデル
-│   └── Providers/            # プロバイダー
-├── database/
-│   ├── migrations/           # マイグレーション
-│   └── seeders/             # シーダー
-├── resources/
-│   ├── views/               # Bladeテンプレート
-│   └── lang/ja/            # 日本語言語ファイル
-├── routes/
-│   └── web.php             # Webルート
-└── public/
-    ├── images/              # 画像ファイル
-    └── er-diagram.html     # ER図
-```
 
 ## ライセンス
 
