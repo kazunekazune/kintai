@@ -31,7 +31,7 @@
 
 ## ER 図
 
-<--- 作成した ER 図の画像 --->
+![ER図](public/images/er-diagram.png)
 
 **ER 図の確認**: `http://localhost/er-diagram.html` で確認可能
 
@@ -136,14 +136,6 @@
 -   `storage/*.key` - 暗号化キー
 -   `*.pem`, `*.key`, `*.crt` - 証明書・秘密鍵
 -   `storage/logs/` - ログファイル
-
-## ライセンス
-
-このプロジェクトは企業内での使用を目的としています。
-
-## 作者
-
-CoachTech 開発チーム
 
 ---
 
