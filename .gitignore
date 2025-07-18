@@ -1,0 +1,158 @@
+# ===========================================
+# Laravel 環境設定ファイル
+# ===========================================
+.env
+.env.*
+!.env.example
+
+# ===========================================
+# アプリケーションキー・セッション・キャッシュ
+# ===========================================
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+storage/*.key
+storage/logs/*
+!storage/logs/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+storage/app/public/*
+!storage/app/public/.gitignore
+
+# ===========================================
+# 依存関係
+# ===========================================
+/vendor/
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# ===========================================
+# データベース
+# ===========================================
+*.sqlite
+*.sqlite3
+*.db
+database/*.sqlite
+database/*.sqlite3
+
+# ===========================================
+# ログファイル
+# ===========================================
+*.log
+logs/
+*.log.*
+
+# ===========================================
+# 証明書・キーファイル
+# ===========================================
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+*.p8
+*.p7b
+*.p7c
+*.p7s
+*.p7m
+*.p7r
+*.spc
+*.sst
+*.stl
+*.cer
+*.der
+*.crt
+*.pem
+*.p7b
+*.p7c
+*.p7s
+*.p7m
+*.p7r
+*.spc
+*.sst
+*.stl
+*.cer
+*.der
+
+# ===========================================
+# IDE・エディタ
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===========================================
+# OS生成ファイル
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===========================================
+# テスト・カバレッジ
+# ===========================================
+.phpunit.result.cache
+coverage/
+.nyc_output/
+coverage.xml
+*.coverage
+*.lcov
+
+# ===========================================
+# 一時ファイル
+# ===========================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# ===========================================
+# Docker
+# ===========================================
+docker-compose.override.yml
+.dockerignore
+
+# ===========================================
+# その他
+# ===========================================
+*.cache
+.sass-cache/
+*.tgz
+*.tar.gz
+*.zip
+*.rar
+
+# ===========================================
+# セキュリティ関連（絶対に除外）
+# ===========================================
+# アプリケーションキー
+APP_KEY=*
+# データベースパスワード
+DB_PASSWORD=*
+# メールパスワード
+MAIL_PASSWORD=*
+# 暗号化キー
+CIPHER_KEY=*
+# セッションキー
+SESSION_SECURE_COOKIE=*
+# APIキー
+API_*
+# 秘密鍵
+PRIVATE_KEY=*
+# アクセストークン
+ACCESS_TOKEN=*
+# リフレッシュトークン
+REFRESH_TOKEN=*

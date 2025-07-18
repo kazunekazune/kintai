@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER図 - 勤怠管理システム</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .mermaid {
+            text-align: center;
+        }
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .legend h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        .legend ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .legend li {
+            margin-bottom: 8px;
+            padding: 5px;
+            background-color: white;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ER図 - 勤怠管理システム</h1>
+        
+        <div class="mermaid">
+            erDiagram
+                users {
+                    bigint id PK
+                    varchar name
+                    varchar email UK
+                    timestamp email_verified_at
+                    varchar password
+                    varchar remember_token
+                    boolean is_admin
+                    timestamp created_at
+                    timestamp updated_at
+                }
+                
+                attendances {
+                    bigint id PK
+                    bigint user_id FK
+                    date date
+                    time clock_in
+                    time clock_out
+                    enum status
+                    text memo
+                    text note
+                    timestamp created_at
+                    timestamp updated_at
+                }
+                
+                break_records {
+                    bigint id PK
+                    bigint attendance_id FK
+                    datetime break_start
+                    datetime break_end
+                    timestamp created_at
+                    timestamp updated_at
+                }
+                
+                attendance_correction_requests {
+                    bigint id PK
+                    bigint user_id FK
+                    bigint attendance_id FK
+                    time requested_clock_in
+                    time requested_clock_out
+                    time requested_break_start
+                    time requested_break_end
+                    text requested_memo
+                    text requested_note
+                    enum status
+                    bigint approved_by FK
+                    timestamp approved_at
+                    timestamp created_at
+                    timestamp updated_at
+                }
+                
+                password_reset_tokens {
+                    varchar email PK
+                    varchar token
+                    timestamp created_at
+                }
+                
+                sessions {
+                    varchar id PK
+                    bigint user_id FK
+                    varchar ip_address
+                    text user_agent
+                    longtext payload
+                    integer last_activity
+                }
+                
+                cache {
+                    varchar key PK
+                    mediumtext value
+                    integer expiration
+                }
+                
+                jobs {
+                    bigint id PK
+                    varchar queue
+                    longtext payload
+                    tinyint attempts
+                    integer reserved_at
+                    integer available_at
+                    integer created_at
+                }
+                
+                failed_jobs {
+                    bigint id PK
+                    varchar uuid UK
+                    text connection
+                    text queue
+                    longtext payload
+                    longtext exception
+                    timestamp failed_at
+                }
+                
+                personal_access_tokens {
+                    bigint id PK
+                    varchar tokenable_type
+                    bigint tokenable_id
+                    varchar name
+                    varchar token UK
+                    text abilities
+                    timestamp last_used_at
+                    timestamp expires_at
+                    timestamp created_at
+                    timestamp updated_at
+                }
+                
+                users ||--o{ attendances : "1:N"
+                users ||--o{ attendance_correction_requests : "1:N"
+                users ||--o{ sessions : "1:N"
+                attendances ||--o{ break_records : "1:N"
+                attendances ||--o{ attendance_correction_requests : "1:N"
+                users ||--o{ attendance_correction_requests : "approved_by"
+        </div>
+        
+        <div class="legend">
+            <h3>テーブル説明</h3>
+            <ul>
+                <li><strong>users</strong>: ユーザー情報（一般ユーザー・管理者）</li>
+                <li><strong>attendances</strong>: 勤怠記録（出勤・退勤・休憩時間）</li>
+                <li><strong>break_records</strong>: 休憩記録（休憩開始・終了時間）</li>
+                <li><strong>attendance_correction_requests</strong>: 勤怠修正申請</li>
+                <li><strong>password_reset_tokens</strong>: パスワードリセットトークン</li>
+                <li><strong>sessions</strong>: セッション管理</li>
+                <li><strong>cache</strong>: キャッシュ</li>
+                <li><strong>jobs</strong>: ジョブキュー</li>
+                <li><strong>failed_jobs</strong>: 失敗したジョブ</li>
+                <li><strong>personal_access_tokens</strong>: APIトークン</li>
+            </ul>
+            
+            <h3>制約・インデックス</h3>
+            <ul>
+                <li><strong>UNIQUE制約</strong>: users.email, attendances(user_id, date), failed_jobs.uuid, personal_access_tokens.token</li>
+                <li><strong>ENUM制約</strong>: attendances.status('勤務外','出勤中','休憩中','退勤済'), attendance_correction_requests.status('承認待ち','承認済み')</li>
+                <li><strong>インデックス</strong>: jobs.queue, sessions.user_id, sessions.last_activity</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            er: {
+                diagramPadding: 20,
+                layoutDirection: 'TB',
+                minEntityWidth: 100,
+                minEntityHeight: 75,
+                entityPadding: 15,
+                stroke: 'gray',
+                fill: 'honeydew',
+                fontSize: 12
+            }
+        });
+    </script>
+</body>
+</html> 
